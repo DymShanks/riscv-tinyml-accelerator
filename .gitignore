@@ -1,0 +1,22 @@
+# Verilator build artifacts
+obj_dir/
+
+# VCD waveform dumps
+sim/*.vcd
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Cocotb sim output
+sim_build/
+results.xml
+*.fst
+
+# Coverage
+*.dat
+*.info
+
+# OS
+.DS_Store
