@@ -1,0 +1,93 @@
+[
+  {
+    "sequence": "MAC|rs1_nonzero|rs2_nonzero",
+    "hit_count": 1,
+    "covered": 1,
+    "flagged": false,
+    "raw_score": 0.07337817748667841
+  },
+  {
+    "sequence": "MAC|rs1_zero",
+    "hit_count": 1,
+    "covered": 1,
+    "flagged": false,
+    "raw_score": 0.07337817748667841
+  },
+  {
+    "sequence": "MAC|rs2_zero",
+    "hit_count": 0,
+    "covered": 0,
+    "flagged": true,
+    "raw_score": -0.0010828051575024755
+  },
+  {
+    "sequence": "MAC|accumulate|4inputs",
+    "hit_count": 1,
+    "covered": 1,
+    "flagged": false,
+    "raw_score": 0.1488833048431234
+  },
+  {
+    "sequence": "MAC|reset_mid_sequence",
+    "hit_count": 1,
+    "covered": 1,
+    "flagged": false,
+    "raw_score": 0.1488833048431234
+  },
+  {
+    "sequence": "MAC|handshake",
+    "hit_count": 1,
+    "covered": 1,
+    "flagged": false,
+    "raw_score": 0.1488833048431234
+  },
+  {
+    "sequence": "MAC|boundary_max_value",
+    "hit_count": 0,
+    "covered": 0,
+    "flagged": true,
+    "raw_score": -0.03585024593004138
+  },
+  {
+    "sequence": "MAC|back_to_back_instructions",
+    "hit_count": 0,
+    "covered": 0,
+    "flagged": false,
+    "raw_score": 0.06934537066572
+  },
+  {
+    "sequence": "MAC_RELU|negative_input",
+    "hit_count": 1,
+    "covered": 1,
+    "flagged": true,
+    "raw_score": -0.06435513328663667
+  },
+  {
+    "sequence": "MAC_RELU|positive_input",
+    "hit_count": 1,
+    "covered": 1,
+    "flagged": false,
+    "raw_score": 0.049991078398468614
+  },
+  {
+    "sequence": "MAC_RELU|zero_boundary",
+    "hit_count": 0,
+    "covered": 0,
+    "flagged": true,
+    "raw_score": -0.10032966409008881
+  },
+  {
+    "sequence": "NOP|not_custom_opcode",
+    "hit_count": 1,
+    "covered": 1,
+    "flagged": false,
+    "raw_score": 0.004331220630009791
+  },
+  {
+    "sequence": "NOP|during_valid_sequence",
+    "hit_count": 0,
+    "covered": 0,
+    "flagged": true,
+    "raw_score": -0.012728379278741153
+  }
+]
