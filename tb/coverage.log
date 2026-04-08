@@ -1,8 +1,0 @@
-MAC_RELU|negative_input: 1
-MAC_RELU|positive_input: 1
-MAC|accumulate|4inputs: 1
-MAC|handshake: 1
-MAC|reset_mid_sequence: 1
-MAC|rs1_nonzero|rs2_nonzero: 1
-MAC|rs1_zero: 1
-NOP|not_custom_opcode: 1
