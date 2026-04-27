@@ -1,45 +1,36 @@
-# Full System Variables
-MODULE = system_top
-RTL_SRC = rtl/system_top.v rtl/tinyml_accelerator.v rtl/picorv32.v 
-SIM_SRC = sim/top_tb.cpp
-
-# Unit & Benchmark Variables
-UNIT_MODULE = tinyml_accelerator
-UNIT_RTL = rtl/tinyml_accelerator.v
-UNIT_SIM = sim/unit_tb.cpp
-BENCH_SIM = sim/benchmark_tb.cpp
-
 VERILATOR = verilator
-BUILD_DIR = obj_dir
-FLAGS = -Wall --trace --cc --exe -Wno-fatal -Wno-PINMISSING -Wno-BLKSEQ -Wno-SYNCASYNCNET
+RTL_DIR   = rtl
+SIM_DIR   = sim
+OBJ_DIR   = obj_dir
+TOP       = tinyml_accelerator
+RTL_SRCS  = $(RTL_DIR)/$(TOP).v
+ROOT      = $(shell pwd)
+VFLAGS    = --cc --exe --build -Wall -Wno-UNUSEDSIGNAL -I$(RTL_DIR) -CFLAGS "-std=c++17 -O2" --top-module $(TOP)
 
-all: build
+.PHONY: all waveform benchmark demo dv coverage clean
 
-# Standard System Build
-build:
-	$(VERILATOR) $(FLAGS) $(RTL_SRC) $(SIM_SRC) --top-module $(MODULE)
-	make -C $(BUILD_DIR) -f V$(MODULE).mk V$(MODULE)
+all: waveform benchmark demo
 
-# Unit Verification
-verify:
-	$(VERILATOR) $(FLAGS) $(UNIT_RTL) $(UNIT_SIM) --top-module $(UNIT_MODULE)
-	make -C $(BUILD_DIR) -f V$(UNIT_MODULE).mk V$(UNIT_MODULE)
-	./$(BUILD_DIR)/V$(UNIT_MODULE)
+waveform:
+	@mkdir -p $(SIM_DIR) $(OBJ_DIR)
+	$(VERILATOR) $(VFLAGS) --trace $(RTL_SRCS) $(SIM_DIR)/waveform_tb.cpp -o $(ROOT)/$(OBJ_DIR)/sim_wave
+	./$(OBJ_DIR)/sim_wave
 
-# TinyML Benchmark Suite (NEW!)
 benchmark:
-	$(VERILATOR) $(FLAGS) $(UNIT_RTL) $(BENCH_SIM) --top-module $(UNIT_MODULE) -o Vbenchmark
-	make -C $(BUILD_DIR) -f V$(UNIT_MODULE).mk Vbenchmark
-	./$(BUILD_DIR)/Vbenchmark
+	@mkdir -p $(OBJ_DIR)
+	$(VERILATOR) $(VFLAGS) $(RTL_SRCS) $(SIM_DIR)/benchmark_tb.cpp -o $(ROOT)/$(OBJ_DIR)/sim_bench
+	./$(OBJ_DIR)/sim_bench | tee sim/benchmark_results.txt
 
-run:
-	./$(BUILD_DIR)/V$(MODULE)
+demo:
+	@mkdir -p $(OBJ_DIR)
+	$(VERILATOR) $(VFLAGS) -CFLAGS "-std=c++17 -O2 -Ifirmware" $(RTL_SRCS) $(SIM_DIR)/demo_inference.cpp -o $(ROOT)/$(OBJ_DIR)/sim_demo
+	./$(OBJ_DIR)/sim_demo | tee sim/demo_results.txt
 
-wave:
-	gtkwave sim/waveform.vcd
+dv:
+	source .venv/bin/activate && python3 tb/test_tinyml.py
 
-wave_verify:
-	gtkwave sim/unit_test.vcd
+coverage:
+	source .venv/bin/activate && python3 tools/coverage_analyser.py
 
 clean:
-	rm -rf $(BUILD_DIR) sim/*.vcd
+	rm -rf $(OBJ_DIR) sim/*.vcd sim/*.txt

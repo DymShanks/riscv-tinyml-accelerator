@@ -1,0 +1,16 @@
+
+=== RvTinyML Benchmark ===
++----------------------------+----------+----------+--------+
+| Operation                  | SW Cycles| HW Cycles| Speedup|
++----------------------------+----------+----------+--------+
+| Single MAC (5x4)          |       35 |        1 |   35.0x |
+| MAC + ReLU                |       39 |        1 |   39.0x |
+| 4-Neuron Layer            |      140 |        4 |   35.0x |
+| 8-Neuron Layer            |      280 |        8 |   35.0x |
+| 16-Neuron Layer           |      560 |       16 |   35.0x |
++----------------------------+----------+----------+--------+
+
+SW baseline : 35 cycles/MAC
+HW result   : 1 cycles/MAC
+Speedup     : 35.0x
+

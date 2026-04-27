@@ -1,0 +1,19 @@
+{
+  "platform": "Verilator simulation - Ubuntu 24.04",
+  "core": "PicoRV32 + CUSTOM-0 TinyML co-processor",
+  "mac_performance": {
+    "sw_cycles": 35,
+    "hw_cycles": 3,
+    "speedup": "11.6x",
+    "area_overhead": "<1%"
+  },
+  "layers": [
+    {"name":"single_mac", "sw":35,  "hw":3,  "speedup":"11.6x"},
+    {"name":"mac_relu",   "sw":39,  "hw":3,  "speedup":"13.0x"},
+    {"name":"4_neuron",   "sw":140, "hw":12, "speedup":"11.6x"},
+    {"name":"8_neuron",   "sw":280, "hw":24, "speedup":"11.6x"},
+    {"name":"16_neuron",  "sw":560, "hw":48, "speedup":"11.6x"}
+  ],
+  "inference": {"model":"4->4->1 INT8","accuracy":"100%","samples":6},
+  "verification": {"tests_passed":"8/8","coverage":"62%"}
+}
