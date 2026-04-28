@@ -9,17 +9,13 @@ VL_INLINE_OPT void Vtinyml_accelerator___024root___ico_sequent__TOP__0(Vtinyml_a
     if (false && vlSelf) {}  // Prevent unused
     Vtinyml_accelerator__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtinyml_accelerator___024root___ico_sequent__TOP__0\n"); );
-    // Init
-    IData/*31:0*/ tinyml_accelerator__DOT__sum;
-    tinyml_accelerator__DOT__sum = 0;
     // Body
-    tinyml_accelerator__DOT__sum = (vlSelf->tinyml_accelerator__DOT__accumulator 
-                                    + (vlSelf->pcpi_rs1 
-                                       * vlSelf->pcpi_rs2));
-    vlSelf->tinyml_accelerator__DOT__next_result = 
-        ((IData)(((0x1000U == (0x7000U & vlSelf->pcpi_insn)) 
-                  & (tinyml_accelerator__DOT__sum >> 0x1fU)))
-          ? 0U : tinyml_accelerator__DOT__sum);
+    vlSelf->tinyml_accelerator__DOT__sum = (vlSelf->tinyml_accelerator__DOT__accumulator 
+                                            + (vlSelf->pcpi_rs1 
+                                               * vlSelf->pcpi_rs2));
+    vlSelf->tinyml_accelerator__DOT__relu_result = 
+        ((vlSelf->tinyml_accelerator__DOT__sum >> 0x1fU)
+          ? 0U : vlSelf->tinyml_accelerator__DOT__sum);
 }
 
 void Vtinyml_accelerator___024root___eval_ico(Vtinyml_accelerator___024root* vlSelf) {
@@ -59,9 +55,6 @@ VL_INLINE_OPT void Vtinyml_accelerator___024root___nba_sequent__TOP__0(Vtinyml_a
     if (false && vlSelf) {}  // Prevent unused
     Vtinyml_accelerator__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtinyml_accelerator___024root___nba_sequent__TOP__0\n"); );
-    // Init
-    IData/*31:0*/ tinyml_accelerator__DOT__sum;
-    tinyml_accelerator__DOT__sum = 0;
     // Body
     vlSelf->pcpi_wait = 0U;
     if (vlSelf->resetn) {
@@ -72,9 +65,19 @@ VL_INLINE_OPT void Vtinyml_accelerator___024root___nba_sequent__TOP__0(Vtinyml_a
                                              & vlSelf->pcpi_insn)))) {
             vlSelf->pcpi_ready = 1U;
             vlSelf->pcpi_wr = 1U;
-            vlSelf->pcpi_rd = vlSelf->tinyml_accelerator__DOT__next_result;
-            vlSelf->tinyml_accelerator__DOT__accumulator 
-                = vlSelf->tinyml_accelerator__DOT__next_result;
+            if ((2U == (7U & (vlSelf->pcpi_insn >> 0xcU)))) {
+                vlSelf->pcpi_rd = 0U;
+                vlSelf->tinyml_accelerator__DOT__accumulator = 0U;
+            } else if ((1U == (7U & (vlSelf->pcpi_insn 
+                                     >> 0xcU)))) {
+                vlSelf->pcpi_rd = vlSelf->tinyml_accelerator__DOT__relu_result;
+                vlSelf->tinyml_accelerator__DOT__accumulator 
+                    = vlSelf->tinyml_accelerator__DOT__relu_result;
+            } else {
+                vlSelf->pcpi_rd = vlSelf->tinyml_accelerator__DOT__sum;
+                vlSelf->tinyml_accelerator__DOT__accumulator 
+                    = vlSelf->tinyml_accelerator__DOT__sum;
+            }
         }
     } else {
         vlSelf->pcpi_ready = 0U;
@@ -82,13 +85,12 @@ VL_INLINE_OPT void Vtinyml_accelerator___024root___nba_sequent__TOP__0(Vtinyml_a
         vlSelf->pcpi_rd = 0U;
         vlSelf->tinyml_accelerator__DOT__accumulator = 0U;
     }
-    tinyml_accelerator__DOT__sum = (vlSelf->tinyml_accelerator__DOT__accumulator 
-                                    + (vlSelf->pcpi_rs1 
-                                       * vlSelf->pcpi_rs2));
-    vlSelf->tinyml_accelerator__DOT__next_result = 
-        ((IData)(((0x1000U == (0x7000U & vlSelf->pcpi_insn)) 
-                  & (tinyml_accelerator__DOT__sum >> 0x1fU)))
-          ? 0U : tinyml_accelerator__DOT__sum);
+    vlSelf->tinyml_accelerator__DOT__sum = (vlSelf->tinyml_accelerator__DOT__accumulator 
+                                            + (vlSelf->pcpi_rs1 
+                                               * vlSelf->pcpi_rs2));
+    vlSelf->tinyml_accelerator__DOT__relu_result = 
+        ((vlSelf->tinyml_accelerator__DOT__sum >> 0x1fU)
+          ? 0U : vlSelf->tinyml_accelerator__DOT__sum);
 }
 
 void Vtinyml_accelerator___024root___eval_nba(Vtinyml_accelerator___024root* vlSelf) {

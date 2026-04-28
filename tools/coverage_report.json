@@ -4,90 +4,90 @@
     "hit_count": 1,
     "covered": 1,
     "flagged": false,
-    "raw_score": 0.07337817748667841
+    "raw_score": 0.02285892636575071
   },
   {
     "sequence": "MAC|rs1_zero",
     "hit_count": 1,
     "covered": 1,
     "flagged": false,
-    "raw_score": 0.07337817748667841
+    "raw_score": 0.02285892636575071
   },
   {
     "sequence": "MAC|rs2_zero",
-    "hit_count": 0,
-    "covered": 0,
-    "flagged": true,
-    "raw_score": -0.0010828051575024755
+    "hit_count": 1,
+    "covered": 1,
+    "flagged": false,
+    "raw_score": 0.02285892636575071
   },
   {
     "sequence": "MAC|accumulate|4inputs",
     "hit_count": 1,
     "covered": 1,
     "flagged": false,
-    "raw_score": 0.1488833048431234
+    "raw_score": 0.1464457236592962
   },
   {
     "sequence": "MAC|reset_mid_sequence",
     "hit_count": 1,
     "covered": 1,
     "flagged": false,
-    "raw_score": 0.1488833048431234
+    "raw_score": 0.1464457236592962
   },
   {
     "sequence": "MAC|handshake",
     "hit_count": 1,
     "covered": 1,
     "flagged": false,
-    "raw_score": 0.1488833048431234
+    "raw_score": 0.1464457236592962
   },
   {
     "sequence": "MAC|boundary_max_value",
-    "hit_count": 0,
-    "covered": 0,
+    "hit_count": 1,
+    "covered": 1,
     "flagged": true,
-    "raw_score": -0.03585024593004138
+    "raw_score": -0.09203388799564938
   },
   {
     "sequence": "MAC|back_to_back_instructions",
-    "hit_count": 0,
-    "covered": 0,
+    "hit_count": 1,
+    "covered": 1,
     "flagged": false,
-    "raw_score": 0.06934537066572
+    "raw_score": 0.1464457236592962
   },
   {
     "sequence": "MAC_RELU|negative_input",
     "hit_count": 1,
     "covered": 1,
     "flagged": true,
-    "raw_score": -0.06435513328663667
+    "raw_score": -0.12253260173280367
   },
   {
     "sequence": "MAC_RELU|positive_input",
     "hit_count": 1,
     "covered": 1,
-    "flagged": false,
-    "raw_score": 0.049991078398468614
+    "flagged": true,
+    "raw_score": -0.0058718579647401015
   },
   {
     "sequence": "MAC_RELU|zero_boundary",
-    "hit_count": 0,
-    "covered": 0,
+    "hit_count": 1,
+    "covered": 1,
     "flagged": true,
-    "raw_score": -0.10032966409008881
+    "raw_score": -0.1520891688775814
   },
   {
     "sequence": "NOP|not_custom_opcode",
     "hit_count": 1,
     "covered": 1,
     "flagged": false,
-    "raw_score": 0.004331220630009791
+    "raw_score": 0.0
   },
   {
     "sequence": "NOP|during_valid_sequence",
-    "hit_count": 0,
-    "covered": 0,
-    "flagged": true,
-    "raw_score": -0.012728379278741153
+    "hit_count": 1,
+    "covered": 1,
+    "flagged": false,
+    "raw_score": 0.0
   }
 ]

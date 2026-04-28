@@ -27,10 +27,10 @@ demo:
 	./$(OBJ_DIR)/sim_demo | tee sim/demo_results.txt
 
 dv:
-	source .venv/bin/activate && python3 tb/test_tinyml.py
+	.venv/bin/python3 tb/test_tinyml.py
 
 coverage:
-	source .venv/bin/activate && python3 tools/coverage_analyser.py
+	.venv/bin/python3 tools/coverage_analyser.py
 
 clean:
 	rm -rf $(OBJ_DIR) sim/*.vcd sim/*.txt

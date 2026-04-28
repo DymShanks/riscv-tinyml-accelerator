@@ -38,5 +38,30 @@
     "test": "NOP instruction ignored",
     "status": "PASS",
     "output": "PASS ready=0"
+  },
+  {
+    "test": "rs2 zero: 99*0=0",
+    "status": "PASS",
+    "output": "PASS 0"
+  },
+  {
+    "test": "boundary max value: 0xFFFF*0xFFFF",
+    "status": "PASS",
+    "output": "PASS 4294836225"
+  },
+  {
+    "test": "back to back: 16 MACs no gap",
+    "status": "PASS",
+    "output": "PASS 16"
+  },
+  {
+    "test": "ReLU zero boundary: 0*0 relu=0",
+    "status": "PASS",
+    "output": "PASS 0"
+  },
+  {
+    "test": "NOP mid sequence: state preserved",
+    "status": "PASS",
+    "output": "PASS 25"
   }
 ]

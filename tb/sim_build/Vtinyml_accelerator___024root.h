@@ -30,7 +30,8 @@ class alignas(VL_CACHE_LINE_BYTES) Vtinyml_accelerator___024root final : public 
     VL_IN(pcpi_rs2,31,0);
     VL_OUT(pcpi_rd,31,0);
     IData/*31:0*/ tinyml_accelerator__DOT__accumulator;
-    IData/*31:0*/ tinyml_accelerator__DOT__next_result;
+    IData/*31:0*/ tinyml_accelerator__DOT__sum;
+    IData/*31:0*/ tinyml_accelerator__DOT__relu_result;
     IData/*31:0*/ __VactIterCount;
     VlTriggerVec<1> __VstlTriggered;
     VlTriggerVec<1> __VicoTriggered;

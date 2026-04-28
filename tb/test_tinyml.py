@@ -16,6 +16,7 @@ BUILD = TB / "sim_build"
 
 CUSTOM_MAC      = 0x0000000B
 CUSTOM_MAC_RELU = 0x0000100B
+CUSTOM_CLR      = 0x0000200B
 NOP_INSN        = 0x00000013
 
 @dataclass
@@ -31,7 +32,6 @@ class CoverageDB:
 
 cov = CoverageDB()
 
-# ── Build verilator objects once ─────────────────────────────────
 def verilator_build():
     BUILD.mkdir(exist_ok=True)
     r = subprocess.run([
@@ -49,7 +49,6 @@ VERILATOR_ROOT = subprocess.run(
 VL_INC = f"{VERILATOR_ROOT}/include"
 
 def build_and_run(harness_code: str) -> str:
-    """Compile harness + verilated objects into executable, return stdout."""
     cpp = BUILD / "harness.cpp"
     exe = BUILD / "harness"
     cpp.write_text(harness_code)
@@ -67,7 +66,6 @@ def build_and_run(harness_code: str) -> str:
     r2 = subprocess.run([str(exe)], capture_output=True, text=True)
     return r2.stdout
 
-# ── Harness template ─────────────────────────────────────────────
 def make_harness(test_body: str) -> str:
     return textwrap.dedent(f"""
     #include "Vtinyml_accelerator.h"
@@ -84,14 +82,20 @@ def make_harness(test_body: str) -> str:
         dut->pcpi_rs1=0;dut->pcpi_rs2=0;
         tick(4); dut->resetn=1; tick(2);
     }}
-    unsigned run_mac(unsigned rs1,unsigned rs2,int relu=0){{
+    unsigned run_insn(unsigned rs1, unsigned rs2, unsigned insn){{
         dut->pcpi_valid=1;
-        dut->pcpi_insn=relu?{CUSTOM_MAC_RELU}:{CUSTOM_MAC};
+        dut->pcpi_insn=insn;
         dut->pcpi_rs1=rs1; dut->pcpi_rs2=rs2;
         tick(1);
         unsigned r=dut->pcpi_rd;
         dut->pcpi_valid=0; tick(2);
         return r;
+    }}
+    unsigned run_mac(unsigned rs1,unsigned rs2,int relu=0){{
+        return run_insn(rs1,rs2,relu?{CUSTOM_MAC_RELU}:{CUSTOM_MAC});
+    }}
+    unsigned run_clr(){{
+        return run_insn(0,0,{CUSTOM_CLR});
     }}
     int main(){{
         dut=new Vtinyml_accelerator;
@@ -103,8 +107,8 @@ def make_harness(test_body: str) -> str:
     }}
     """)
 
-# ── Individual test harnesses ────────────────────────────────────
 TESTS = [
+    # ── Original 8 tests ─────────────────────────────────────────
     ("basic MAC: 10*5=50",
      'unsigned r=run_mac(10,5);printf(r==50?"PASS %u\\n":"FAIL got %u expected 50\\n",r);',
      "MAC|rs1_nonzero|rs2_nonzero"),
@@ -144,9 +148,40 @@ TESTS = [
      'tick(2);int ok=(dut->pcpi_ready==0);'
      'printf(ok?"PASS ready=0\\n":"FAIL ready should be 0 got %d\\n",dut->pcpi_ready);',
      "NOP|not_custom_opcode"),
+
+    # ── 5 new tests for 100% coverage ────────────────────────────
+
+    ("rs2 zero: 99*0=0",
+     'unsigned r=run_mac(99,0);printf(r==0?"PASS %u\\n":"FAIL got %u expected 0\\n",r);',
+     "MAC|rs2_zero"),
+
+    ("boundary max value: 0xFFFF*0xFFFF",
+     'reset();unsigned r=run_mac(0xFFFF,0xFFFF);'
+     'unsigned expected=0xFFFF*0xFFFF;'
+     'printf(r==expected?"PASS %u\\n":"FAIL got %u expected %u\\n",r,expected);',
+     "MAC|boundary_max_value"),
+
+    ("back to back: 16 MACs no gap",
+     'reset();'
+     'for(int i=0;i<15;i++){dut->pcpi_valid=1;dut->pcpi_insn=0x0000000B;'
+     'dut->pcpi_rs1=1;dut->pcpi_rs2=1;tick(1);dut->pcpi_valid=0;}'
+     'unsigned r=run_mac(1,1);'
+     'printf(r==16?"PASS %u\\n":"FAIL got %u expected 16\\n",r);',
+     "MAC|back_to_back_instructions"),
+
+    ("ReLU zero boundary: 0*0 relu=0",
+     'reset();unsigned r=run_mac(0,0,1);printf(r==0?"PASS %u\\n":"FAIL got %u expected 0\\n",r);',
+     "MAC_RELU|zero_boundary"),
+
+    ("NOP mid sequence: state preserved",
+     'run_mac(5,5);'
+     f'dut->pcpi_valid=1;dut->pcpi_insn={NOP_INSN};dut->pcpi_rs1=99;dut->pcpi_rs2=99;'
+     'tick(2);dut->pcpi_valid=0;tick(1);'
+     'unsigned r=run_mac(0,0);'
+     'printf(r==25?"PASS %u\\n":"FAIL got %u expected 25 (acc preserved)\\n",r);',
+     "NOP|during_valid_sequence"),
 ]
 
-# ── Runner ───────────────────────────────────────────────────────
 if __name__ == "__main__":
     print("\n" + "="*52)
     print("  tinyml_accelerator — Python DV Testbench")

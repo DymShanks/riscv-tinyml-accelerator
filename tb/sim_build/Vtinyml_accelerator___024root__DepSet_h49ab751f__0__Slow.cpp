@@ -163,7 +163,8 @@ VL_ATTR_COLD void Vtinyml_accelerator___024root___ctor_var_reset(Vtinyml_acceler
     vlSelf->pcpi_wait = VL_RAND_RESET_I(1);
     vlSelf->pcpi_ready = VL_RAND_RESET_I(1);
     vlSelf->tinyml_accelerator__DOT__accumulator = VL_RAND_RESET_I(32);
-    vlSelf->tinyml_accelerator__DOT__next_result = VL_RAND_RESET_I(32);
+    vlSelf->tinyml_accelerator__DOT__sum = VL_RAND_RESET_I(32);
+    vlSelf->tinyml_accelerator__DOT__relu_result = VL_RAND_RESET_I(32);
     vlSelf->__Vtrigprevexpr___TOP__clk__0 = VL_RAND_RESET_I(1);
     vlSelf->__Vtrigprevexpr___TOP__resetn__0 = VL_RAND_RESET_I(1);
 }
