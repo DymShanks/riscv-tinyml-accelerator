@@ -1,0 +1,42 @@
+[
+  {
+    "test": "basic MAC: 10*5=50",
+    "status": "PASS",
+    "output": "PASS 50"
+  },
+  {
+    "test": "accumulation: neuron=70",
+    "status": "PASS",
+    "output": "PASS 70"
+  },
+  {
+    "test": "ReLU clamps negative to 0",
+    "status": "PASS",
+    "output": "PASS 0"
+  },
+  {
+    "test": "ReLU passes positive unchanged",
+    "status": "PASS",
+    "output": "PASS 30"
+  },
+  {
+    "test": "zero input: 0*999=0",
+    "status": "PASS",
+    "output": "PASS 0"
+  },
+  {
+    "test": "pcpi handshake signals assert",
+    "status": "PASS",
+    "output": "PASS handshake ok"
+  },
+  {
+    "test": "reset clears accumulator",
+    "status": "PASS",
+    "output": "PASS 0"
+  },
+  {
+    "test": "NOP instruction ignored",
+    "status": "PASS",
+    "output": "PASS ready=0"
+  }
+]

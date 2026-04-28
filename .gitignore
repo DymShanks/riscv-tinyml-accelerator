@@ -1,1 +1,8 @@
+obj_dir/
 .venv/
+*.vcd
+*.o
+*.a
+__pycache__/
+*.pyc
+.DS_Store
