@@ -1,8 +1,17 @@
 module system_top (
     input clk,
     input resetn,
-    output trap
+    output trap,
+    
+    // Exposed Memory Interface for C++ Testbench
+    output        mem_valid,
+    output [31:0] mem_addr,
+    output [31:0] mem_wdata,
+    output [ 3:0] mem_wstrb,
+    input  [31:0] mem_rdata,
+    input         mem_ready
 );
+
     wire        pcpi_valid;
     wire [31:0] pcpi_insn;
     wire [31:0] pcpi_rs1;
@@ -11,8 +20,6 @@ module system_top (
     wire [31:0] pcpi_rd;
     wire        pcpi_wait;
     wire        pcpi_ready;
-    wire mem_valid;
-    wire mem_ready = 1'b1; 
 
     // Instantiate CPU
     picorv32 #(.ENABLE_PCPI(1)) cpu (
@@ -20,7 +27,12 @@ module system_top (
         .resetn    (resetn),
         .trap      (trap),
         .mem_valid (mem_valid),
+        .mem_instr (), // Left unconnected as we use unified memory
         .mem_ready (mem_ready),
+        .mem_addr  (mem_addr),
+        .mem_wdata (mem_wdata),
+        .mem_wstrb (mem_wstrb),
+        .mem_rdata (mem_rdata),
         .pcpi_valid(pcpi_valid),
         .pcpi_insn (pcpi_insn),
         .pcpi_rs1  (pcpi_rs1),
@@ -44,4 +56,5 @@ module system_top (
         .pcpi_wait (pcpi_wait),
         .pcpi_ready(pcpi_ready)
     );
+
 endmodule
