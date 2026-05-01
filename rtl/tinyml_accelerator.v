@@ -1,3 +1,4 @@
+/* verilator lint_off UNUSEDSIGNAL */
 module tinyml_accelerator (
     input wire        clk,
     input wire        resetn,
@@ -14,9 +15,9 @@ module tinyml_accelerator (
     wire [6:0] opcode        = pcpi_insn[6:0];
     wire [2:0] funct3        = pcpi_insn[14:12];
     wire is_custom_instr     = (opcode == 7'b0001011);
-    wire is_mac              = (funct3 == 3'b000); // acc += rs1*rs2
-    wire is_mac_relu         = (funct3 == 3'b001); // acc += rs1*rs2, ReLU
-    wire is_clr              = (funct3 == 3'b010); // acc = 0
+    wire is_mac              = (funct3 == 3'b000);
+    wire is_mac_relu         = (funct3 == 3'b001);
+    wire is_clr              = (funct3 == 3'b010);
 
     // ── Internal Accumulator ───────────────────────────────────
     reg [31:0] accumulator;
@@ -32,34 +33,35 @@ module tinyml_accelerator (
             accumulator <= 32'b0;
             pcpi_wr     <= 1'b0;
             pcpi_ready  <= 1'b0;
-            pcpi_rd     <= 32'b0;
             pcpi_wait   <= 1'b0;
+            pcpi_rd     <= 32'b0;
         end else begin
+            // Default: deassert all handshake signals
             pcpi_wr    <= 1'b0;
             pcpi_ready <= 1'b0;
             pcpi_wait  <= 1'b0;
 
             if (pcpi_valid && is_custom_instr) begin
+                // Assert wait=1 AND ready=1 simultaneously
+                // This tells PicoRV32: "I have the result NOW, 
+                // take it this cycle and don't move on without it"
+                pcpi_wait  <= 1'b1;
+                pcpi_ready <= 1'b1;
+                pcpi_wr    <= 1'b1;
+
                 if (is_clr) begin
-                    // funct3=010: clear accumulator, return 0
                     accumulator <= 32'b0;
                     pcpi_rd     <= 32'b0;
-                    pcpi_wr     <= 1'b1;
-                    pcpi_ready  <= 1'b1;
                 end else if (is_mac_relu) begin
-                    // funct3=001: MAC + ReLU
                     accumulator <= relu_result;
                     pcpi_rd     <= relu_result;
-                    pcpi_wr     <= 1'b1;
-                    pcpi_ready  <= 1'b1;
                 end else begin
-                    // funct3=000: plain MAC
+                    // plain MAC
                     accumulator <= sum;
                     pcpi_rd     <= sum;
-                    pcpi_wr     <= 1'b1;
-                    pcpi_ready  <= 1'b1;
                 end
             end
         end
     end
 endmodule
+/* verilator lint_on UNUSEDSIGNAL */

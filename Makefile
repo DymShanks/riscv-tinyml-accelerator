@@ -5,7 +5,7 @@ OBJ_DIR   = obj_dir
 TOP       = tinyml_accelerator
 RTL_SRCS  = $(RTL_DIR)/$(TOP).v
 ROOT      = $(shell pwd)
-VFLAGS    = --cc --exe --build -Wall -Wno-UNUSEDSIGNAL -I$(RTL_DIR) -CFLAGS "-std=c++17 -O2" --top-module $(TOP)
+VFLAGS    = --cc --exe --build -Wall -Wno-UNUSEDSIGNAL -Wno-DECLFILENAME -Wno-GENUNNAMED -I$(RTL_DIR) -CFLAGS "-std=c++17 -O2" --top-module $(TOP)
 
 .PHONY: all waveform benchmark demo dv coverage clean
 
@@ -34,3 +34,30 @@ coverage:
 
 clean:
 	rm -rf $(OBJ_DIR) sim/*.vcd sim/*.txt
+
+soc:
+	@mkdir -p $(OBJ_DIR)
+	$(VERILATOR) $(VFLAGS) --trace \
+	    $(RTL_DIR)/picorv32.v \
+	    $(RTL_DIR)/tinyml_accelerator.v \
+	    $(RTL_DIR)/system_top.v \
+	    $(SIM_DIR)/soc_tb.cpp \
+	    -o $(ROOT)/$(OBJ_DIR)/sim_soc
+	./$(OBJ_DIR)/sim_soc
+
+soc:
+	@mkdir -p $(OBJ_DIR)
+	$(VERILATOR) --cc --exe --build \
+	    -Wno-UNUSEDSIGNAL -Wno-DECLFILENAME -Wno-GENUNNAMED \
+	    -Wno-PINCONNECTEMPTY -Wno-PINMISSING \
+	    -Wno-BLKSEQ -Wno-SYNCASYNCNET \
+	    -I$(RTL_DIR) \
+	    -CFLAGS "-std=c++17 -O2" \
+	    --top-module system_top \
+	    --trace \
+	    $(RTL_DIR)/picorv32.v \
+	    $(RTL_DIR)/tinyml_accelerator.v \
+	    $(RTL_DIR)/system_top.v \
+	    $(SIM_DIR)/soc_tb.cpp \
+	    -o $(ROOT)/$(OBJ_DIR)/sim_soc
+	./$(OBJ_DIR)/sim_soc
