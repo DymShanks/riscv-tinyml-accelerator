@@ -47,7 +47,7 @@ VL_ATTR_COLD void Vtinyml_accelerator___024root___eval_settle(Vtinyml_accelerato
 #ifdef VL_DEBUG
             Vtinyml_accelerator___024root___dump_triggers__stl(vlSelf);
 #endif
-            VL_FATAL_MT("/home/d1/riscv-tinyml-accelerator/rtl/tinyml_accelerator.v", 1, "", "Settle region did not converge.");
+            VL_FATAL_MT("/home/d1/riscv-tinyml-accelerator/rtl/tinyml_accelerator.v", 2, "", "Settle region did not converge.");
         }
         __VstlIterCount = ((IData)(1U) + __VstlIterCount);
         __VstlContinue = 0U;

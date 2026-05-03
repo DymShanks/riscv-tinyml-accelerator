@@ -56,13 +56,14 @@ VL_INLINE_OPT void Vtinyml_accelerator___024root___nba_sequent__TOP__0(Vtinyml_a
     Vtinyml_accelerator__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtinyml_accelerator___024root___nba_sequent__TOP__0\n"); );
     // Body
-    vlSelf->pcpi_wait = 0U;
     if (vlSelf->resetn) {
+        vlSelf->pcpi_wait = 0U;
         vlSelf->pcpi_ready = 0U;
         vlSelf->pcpi_wr = 0U;
         if (((IData)(vlSelf->pcpi_valid) & (0xbU == 
                                             (0x7fU 
                                              & vlSelf->pcpi_insn)))) {
+            vlSelf->pcpi_wait = 1U;
             vlSelf->pcpi_ready = 1U;
             vlSelf->pcpi_wr = 1U;
             if ((2U == (7U & (vlSelf->pcpi_insn >> 0xcU)))) {
@@ -80,6 +81,7 @@ VL_INLINE_OPT void Vtinyml_accelerator___024root___nba_sequent__TOP__0(Vtinyml_a
             }
         }
     } else {
+        vlSelf->pcpi_wait = 0U;
         vlSelf->pcpi_ready = 0U;
         vlSelf->pcpi_wr = 0U;
         vlSelf->pcpi_rd = 0U;
@@ -166,7 +168,7 @@ void Vtinyml_accelerator___024root___eval(Vtinyml_accelerator___024root* vlSelf)
 #ifdef VL_DEBUG
             Vtinyml_accelerator___024root___dump_triggers__ico(vlSelf);
 #endif
-            VL_FATAL_MT("/home/d1/riscv-tinyml-accelerator/rtl/tinyml_accelerator.v", 1, "", "Input combinational region did not converge.");
+            VL_FATAL_MT("/home/d1/riscv-tinyml-accelerator/rtl/tinyml_accelerator.v", 2, "", "Input combinational region did not converge.");
         }
         __VicoIterCount = ((IData)(1U) + __VicoIterCount);
         __VicoContinue = 0U;
@@ -182,7 +184,7 @@ void Vtinyml_accelerator___024root___eval(Vtinyml_accelerator___024root* vlSelf)
 #ifdef VL_DEBUG
             Vtinyml_accelerator___024root___dump_triggers__nba(vlSelf);
 #endif
-            VL_FATAL_MT("/home/d1/riscv-tinyml-accelerator/rtl/tinyml_accelerator.v", 1, "", "NBA region did not converge.");
+            VL_FATAL_MT("/home/d1/riscv-tinyml-accelerator/rtl/tinyml_accelerator.v", 2, "", "NBA region did not converge.");
         }
         __VnbaIterCount = ((IData)(1U) + __VnbaIterCount);
         __VnbaContinue = 0U;
@@ -193,7 +195,7 @@ void Vtinyml_accelerator___024root___eval(Vtinyml_accelerator___024root* vlSelf)
 #ifdef VL_DEBUG
                 Vtinyml_accelerator___024root___dump_triggers__act(vlSelf);
 #endif
-                VL_FATAL_MT("/home/d1/riscv-tinyml-accelerator/rtl/tinyml_accelerator.v", 1, "", "Active region did not converge.");
+                VL_FATAL_MT("/home/d1/riscv-tinyml-accelerator/rtl/tinyml_accelerator.v", 2, "", "Active region did not converge.");
             }
             vlSelf->__VactIterCount = ((IData)(1U) 
                                        + vlSelf->__VactIterCount);
