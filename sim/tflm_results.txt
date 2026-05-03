@@ -1,0 +1,33 @@
+
+╔══════════════════════════════════════════════════════════╗
+║  RvTinyML × TFLM Integration Demo                       ║
+║  FullyConnected kernel with hardware MAC acceleration    ║
+║  Each inner loop MAC → CUSTOM-0 RISC-V instruction       ║
+╚══════════════════════════════════════════════════════════╝
+
+TFLM Kernel: RvTinyML_FullyConnected (hardware-accelerated)
+Model: 4→4→1 INT8, 20 total MAC operations
+
+Sample                            Score   Result      Status
+--------------------------------------------------------------
+Normal  - Idle machine            0       Normal      CORRECT
+Normal  - Light load              0       Normal      CORRECT
+ANOMALY - Overheating             87      ANOMALY     CORRECT
+ANOMALY - Excess vibration        127     ANOMALY     CORRECT
+Normal  - Cold start              0       Normal      CORRECT
+ANOMALY - Pressure spike          68      ANOMALY     CORRECT
+--------------------------------------------------------------
+Accuracy : 6/6 (100%)
+
+╔══════════════════════════════════════════════════════════╗
+║  TFLM Kernel Performance                                 ║
+╠══════════════════════════════════════════════════════════╣
+║  Total MAC operations   : 120                          ║
+║  HW cycles (this work)  : 150                          ║
+║  SW cycles (baseline)   : 5250                         ║
+║  Speedup                : 35.0 x                       ║
+╚══════════════════════════════════════════════════════════╝
+
+TFLM integration verified: hardware MAC replaces software
+inner loop while all quantization math remains in software.
+

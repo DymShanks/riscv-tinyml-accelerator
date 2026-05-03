@@ -61,3 +61,12 @@ soc:
 	    $(SIM_DIR)/soc_tb.cpp \
 	    -o $(ROOT)/$(OBJ_DIR)/sim_soc
 	./$(OBJ_DIR)/sim_soc
+
+tflm:
+	@mkdir -p $(OBJ_DIR)
+	$(VERILATOR) $(VFLAGS) \
+	    -CFLAGS "-std=c++17 -O2 -Ifirmware/tflm_integration" \
+	    $(RTL_SRCS) \
+	    $(SIM_DIR)/tflm_integration_demo.cpp \
+	    -o $(ROOT)/$(OBJ_DIR)/sim_tflm
+	./$(OBJ_DIR)/sim_tflm | tee sim/tflm_results.txt
