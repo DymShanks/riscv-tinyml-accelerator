@@ -6,3 +6,11 @@ obj_dir/
 __pycache__/
 *.pyc
 .DS_Store
+*.tar.gz
+*.tar.xz
+*.zip
+mem_rdata
+mem_ready
+obj_dir/
+.venv/
+third_party/
